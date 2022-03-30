@@ -58,4 +58,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-UserSettings/Search.settings
+UserSettings/**
+Screenshot_*
+Assets/ImportLibraries/**
+Assets/ImportLibraries*
