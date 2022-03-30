@@ -1,5 +1,9 @@
 # FruitWarrior
 
+## Plateform
+
+## Device
+
 ## Story
 
 ## Gameplay
