@@ -9,13 +9,19 @@ using UnityEngine;
 /// IBzSliceable implementation in one of its parent.
 /// </summary>
 [DisallowMultipleComponent]
+[RequireComponent(typeof(AudioSource))]
 public class KnifeSliceableObjectBase : MonoBehaviour
 {
 	IBzSliceableNoRepeat _sliceableAsync;
+    AudioSource _audioSource;
+
+    [SerializeField]
+    private AudioClip[] _cutSounds;
 
 	void Start()
 	{
 		_sliceableAsync = GetComponent<IBzSliceableNoRepeat>();
+        _audioSource = GetComponent<AudioSource>();
 	}
 
 	void OnTriggerExit(Collider other)
@@ -40,6 +46,10 @@ public class KnifeSliceableObjectBase : MonoBehaviour
 
 		if (_sliceableAsync != null)
 		{
+            if (_cutSounds.Length > 0) {
+                _audioSource.PlayOneShot(_cutSounds[Random.Range(0, _cutSounds.Length)]);
+            }
+
 			_sliceableAsync.Slice(plane, knife.SliceID, CallBack);
 		}
 	}
