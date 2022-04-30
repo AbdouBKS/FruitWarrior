@@ -1,7 +1,7 @@
 using BzKovSoft.ObjectSlicer;
 using UnityEngine;
 
-public class KnifeSliceableGravity : KnifeSliceableObjectBase
+public class KnifeSliceableGravity : KnifeSliceableBase
 {
 	protected override void CallBack(BzSliceTryResult result)
 	{

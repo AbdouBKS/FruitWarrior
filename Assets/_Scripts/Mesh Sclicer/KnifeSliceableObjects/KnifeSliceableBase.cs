@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(AudioSource))]
-public class KnifeSliceableObjectBase : MonoBehaviour
+public class KnifeSliceableBase : MonoBehaviour
 {
 	IBzSliceableNoRepeat _sliceableAsync;
     AudioSource _audioSource;

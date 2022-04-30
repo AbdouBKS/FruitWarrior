@@ -10,20 +10,20 @@ public class KnifeSliceableButton : KnifeSliceableGravity
 
     [Serializable]
     /// <summary>
-    /// Function definition for a button click event.
+    /// Function definition for a button cut event.
     /// </summary>
-    public class ButtonClickedEvent : UnityEvent {}
+    public class ButtonCuttedEvent : UnityEvent {}
 
-    // Event delegates triggered on click.
+    // Event delegates triggered on cut.
     [Space(10)]
-    [FormerlySerializedAs("onClick")]
+    [FormerlySerializedAs("onCut")]
     [SerializeField]
-    private ButtonClickedEvent m_OnClick = new ButtonClickedEvent();
+    private ButtonCuttedEvent m_OnCut = new ButtonCuttedEvent();
 
-    public ButtonClickedEvent onClick
+    public ButtonCuttedEvent onCut
     {
-        get { return m_OnClick; }
-        set { m_OnClick = value; }
+        get { return m_OnCut; }
+        set { m_OnCut = value; }
     }
 
 	protected override void CallBack(BzSliceTryResult result)
@@ -37,7 +37,7 @@ public class KnifeSliceableButton : KnifeSliceableGravity
 
         SetCutedObjectToNonOriginal();
 
-        m_OnClick.Invoke();
+        m_OnCut.Invoke();
 
         void SetCutedObjectToNonOriginal()
         {
