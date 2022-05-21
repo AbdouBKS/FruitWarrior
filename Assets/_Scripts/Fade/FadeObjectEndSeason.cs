@@ -37,7 +37,8 @@ public class FadeObjectEndSeason : MonoBehaviour
 
     void _SetMaterialAlpha(int i, int value) {
         FadeObject FadeObject = seasonObjectList[i].gameObject.GetComponent<FadeObject>();
-        if (FadeObject.Materials[0].HasProperty("_Color")) {
+        if (FadeObject.Materials != null && FadeObject.Materials.Count > 0 &&
+        FadeObject.Materials[0].HasProperty("_Color")) {
             while (FadeObject.Materials[0].color.a > FadedAlpha)
             {
                 for (int j = 0; j < FadeObject.Materials.Count; j++)
@@ -66,7 +67,7 @@ public class FadeObjectEndSeason : MonoBehaviour
             ++indexSeason;
             if (indexSeason >= seasonObjectList.Count)
                 indexSeason = 0;
-    
+
             RunningCoroutines.Add(
                 seasonObjectList[indexSeason],
                 StartCoroutine(FadeObjectIn(seasonObjectList[indexSeason]))
