@@ -86,16 +86,19 @@ public class FadeObjectEndSeason : MonoBehaviour
         {
             FadeObject.Materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha); // affects both "Transparent" and "Fade" options
             FadeObject.Materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha); // affects both "Transparent" and "Fade" options
+            FadeObject.Materials[i].EnableKeyword("_ALPHABLEND_ON");
+            /*
             FadeObject.Materials[i].SetInt("_ZWrite", 0); // disable Z writing
+        
             if (FadingMode == FadeMode.Fade)
             {
-                FadeObject.Materials[i].EnableKeyword("_ALPHABLEND_ON");
+                
             }
             else
             {
                 FadeObject.Materials[i].EnableKeyword("_ALPHAPREMULTIPLY_ON");
             }
-
+            */
             FadeObject.Materials[i].renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
         }
 
@@ -121,6 +124,25 @@ public class FadeObjectEndSeason : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < FadeObject.Materials.Count; i++)
+        {
+            FadeObject.Materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha); // affects both "Transparent" and "Fade" options
+            FadeObject.Materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha); // affects both "Transparent" and "Fade" options
+            FadeObject.Materials[i].DisableKeyword("_ALPHABLEND_ON");
+            /*
+            FadeObject.Materials[i].SetInt("_ZWrite", 0); // disable Z writing
+        
+            if (FadingMode == FadeMode.Fade)
+            {
+                
+            }
+            else
+            {
+                FadeObject.Materials[i].EnableKeyword("_ALPHAPREMULTIPLY_ON");
+            }
+            */
+        }
+
         if (RunningCoroutines.ContainsKey(season))
         {
             StopCoroutine(RunningCoroutines[season]);
@@ -137,6 +159,24 @@ public class FadeObjectEndSeason : MonoBehaviour
         float waitTime = 1f / FadeFPS;
         WaitForSeconds Wait = new WaitForSeconds(waitTime);
         int ticks = 1;
+
+        for (int i = 0; i < FadeObject.Materials.Count; i++)
+        {
+            /*
+            if (FadingMode == FadeMode.Fade)
+            {
+                FadeObject.Materials[i].DisableKeyword("_ALPHABLEND_ON");
+            }
+            else
+            {
+                FadeObject.Materials[i].DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            }
+            FadeObject.Materials[i].SetInt("_ZWrite", 1); // re-enable Z Writing
+            */
+            FadeObject.Materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            FadeObject.Materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+            FadeObject.Materials[i].renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+        }
 
         if (FadeObject.Materials[0].HasProperty("_Color"))
         {
@@ -160,22 +200,6 @@ public class FadeObjectEndSeason : MonoBehaviour
                 season.isActive = true;
                 yield return Wait;
             }
-        }
-
-        for (int i = 0; i < FadeObject.Materials.Count; i++)
-        {
-            if (FadingMode == FadeMode.Fade)
-            {
-                FadeObject.Materials[i].DisableKeyword("_ALPHABLEND_ON");
-            }
-            else
-            {
-                FadeObject.Materials[i].DisableKeyword("_ALPHAPREMULTIPLY_ON");
-            }
-            FadeObject.Materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            FadeObject.Materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            FadeObject.Materials[i].SetInt("_ZWrite", 1); // re-enable Z Writing
-            FadeObject.Materials[i].renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
         }
 
         if (RunningCoroutines.ContainsKey(season))
