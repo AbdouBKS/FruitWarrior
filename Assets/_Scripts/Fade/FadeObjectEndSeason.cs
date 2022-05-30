@@ -57,22 +57,20 @@ public class FadeObjectEndSeason : MonoBehaviour
         }
     }
 
-    private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            RunningCoroutines.Add(
-                seasonObjectList[indexSeason],
-                StartCoroutine(FadeObjectOut(seasonObjectList[indexSeason]))
-            );
+    public void changeEnvironment() {
+        RunningCoroutines.Add(
+            seasonObjectList[indexSeason],
+            StartCoroutine(FadeObjectOut(seasonObjectList[indexSeason]))
+        );
 
-            ++indexSeason;
-            if (indexSeason >= seasonObjectList.Count)
-                indexSeason = 0;
+        ++indexSeason;
+        if (indexSeason >= seasonObjectList.Count)
+            indexSeason = 0;
 
-            RunningCoroutines.Add(
-                seasonObjectList[indexSeason],
-                StartCoroutine(FadeObjectIn(seasonObjectList[indexSeason]))
-            );
-        }
+        RunningCoroutines.Add(
+            seasonObjectList[indexSeason],
+            StartCoroutine(FadeObjectIn(seasonObjectList[indexSeason]))
+        );
     }
 
     private IEnumerator FadeObjectOut(SeasonObject season)

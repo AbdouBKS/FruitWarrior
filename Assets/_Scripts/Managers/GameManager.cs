@@ -2,31 +2,46 @@ using System;
 using UnityEngine;
 
 public class GameManager : StaticInstance<GameManager> {
-    public static event Action<GameState> OnBeforeStateChanged;
-    public static event Action<GameState> OnAfterStateChanged;
+    [SerializeField]
+    private int maxChangementSeasonCounterTime;
+    [SerializeField]
+    private int minChangementSeasonCounterTime;
+    [SerializeField]
+    private float currentCounterTime;
+    [SerializeField]
+    private int? maxCounterTime = null;
+    private FadeObjectEndSeason fadeObjectEndSeason;
 
-    public GameState State { get; private set; }
+    private void Start() {
+        fadeObjectEndSeason = GetComponent<FadeObjectEndSeason>();
+    }
 
-    void Start() => ChangeState(GameState.Starting);
-
-    public void ChangeState(GameState newState) {
-        OnBeforeStateChanged?.Invoke(newState);
-
-        State = newState;
-        switch (newState) {
-            case GameState.Starting:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+    private void Update() {
+        bool _hasCounterReached = hasCounterReached();
+        if (maxCounterTime == null || _hasCounterReached) {
+            currentCounterTime = 0;
+            _setMaxCounterTime();
         }
+        if (_hasCounterReached)
+            fadeObjectEndSeason.changeEnvironment();
+        _addCounter();
+    }
 
-        OnAfterStateChanged?.Invoke(newState);
+    public bool hasCounterReached() {
+        if (currentCounterTime > maxCounterTime)
+            return true;
+        return false;
+    }
 
-        Debug.Log($"New state: {newState}");
+    private void _addCounter() {
+        currentCounterTime += Time.deltaTime;
+    }
+
+    private void _setMaxCounterTime() {
+        maxCounterTime = UnityEngine.Random.Range(
+            minChangementSeasonCounterTime,
+            maxChangementSeasonCounterTime
+        );
     }
 }
 
-[Serializable]
-public enum GameState {
-    Starting = 0,
-}
