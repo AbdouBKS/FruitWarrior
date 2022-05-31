@@ -12,34 +12,39 @@ public class SeasonObject {
 public class FadeObjectEndSeason : MonoBehaviour
 {
     [SerializeField]
-    private List<SeasonObject> seasonObjectList;
+    private List<SeasonObject> _seasonObjectList;
     [SerializeField]
-    private int indexSeason = 0;
+    private int _indexSeason = 0;
+    public int indexSeason {
+        get {
+            return _indexSeason;
+        }
+    }
 
     [SerializeField]
-    private float FadedAlpha = 0.33f;
+    private float _fadedAlpha = 0.33f;
     [SerializeField]
-    private FadeMode FadingMode;
+    private FadeMode _fadingMode;
     [SerializeField]
-    private int FadeFPS = 30;
+    private int _fadeFPS = 30;
     [SerializeField]
-    private float FadeSpeed = 1f;
+    private float _fadeSpeed = 1f;
 
-    private Dictionary<SeasonObject, Coroutine> RunningCoroutines = new Dictionary<SeasonObject, Coroutine>();
+    private Dictionary<SeasonObject, Coroutine> _runningCoroutines = new Dictionary<SeasonObject, Coroutine>();
 
     private void Awake() {
-        for (int i = 0; i < seasonObjectList.Count; ++i) {
-            seasonObjectList[i].gameObject.SetActive(seasonObjectList[i].isActive);
-            if (!seasonObjectList[i].isActive)
+        for (int i = 0; i < _seasonObjectList.Count; ++i) {
+            _seasonObjectList[i].gameObject.SetActive(_seasonObjectList[i].isActive);
+            if (!_seasonObjectList[i].isActive)
                 _SetMaterialAlpha(i, 0);
         }
     }
 
     void _SetMaterialAlpha(int i, int value) {
-        FadeObject FadeObject = seasonObjectList[i].gameObject.GetComponent<FadeObject>();
+        FadeObject FadeObject = _seasonObjectList[i].gameObject.GetComponent<FadeObject>();
         if (FadeObject.Materials != null && FadeObject.Materials.Count > 0 &&
         FadeObject.Materials[0].HasProperty("_Color")) {
-            while (FadeObject.Materials[0].color.a > FadedAlpha)
+            while (FadeObject.Materials[0].color.a > _fadedAlpha)
             {
                 for (int j = 0; j < FadeObject.Materials.Count; j++)
                 {
@@ -58,25 +63,25 @@ public class FadeObjectEndSeason : MonoBehaviour
     }
 
     public void changeEnvironment() {
-        RunningCoroutines.Add(
-            seasonObjectList[indexSeason],
-            StartCoroutine(FadeObjectOut(seasonObjectList[indexSeason]))
+        _runningCoroutines.Add(
+            _seasonObjectList[_indexSeason],
+            StartCoroutine(FadeObjectOut(_seasonObjectList[_indexSeason]))
         );
 
-        ++indexSeason;
-        if (indexSeason >= seasonObjectList.Count)
-            indexSeason = 0;
+        ++_indexSeason;
+        if (_indexSeason >= _seasonObjectList.Count)
+            _indexSeason = 0;
 
-        RunningCoroutines.Add(
-            seasonObjectList[indexSeason],
-            StartCoroutine(FadeObjectIn(seasonObjectList[indexSeason]))
+        _runningCoroutines.Add(
+            _seasonObjectList[_indexSeason],
+            StartCoroutine(FadeObjectIn(_seasonObjectList[_indexSeason]))
         );
     }
 
     private IEnumerator FadeObjectOut(SeasonObject season)
     {
         FadeObject FadeObject = season.gameObject.GetComponent<FadeObject>();
-        float waitTime = 1f / FadeFPS;
+        float waitTime = 1f / _fadeFPS;
         WaitForSeconds Wait = new WaitForSeconds(waitTime);
         int ticks = 1;
 
@@ -102,7 +107,7 @@ public class FadeObjectEndSeason : MonoBehaviour
 
         if (FadeObject.Materials[0].HasProperty("_Color"))
         {
-            while (FadeObject.Materials[0].color.a > FadedAlpha)
+            while (FadeObject.Materials[0].color.a > _fadedAlpha)
             {
                 for (int i = 0; i < FadeObject.Materials.Count; i++)
                 {
@@ -112,7 +117,7 @@ public class FadeObjectEndSeason : MonoBehaviour
                             FadeObject.Materials[i].color.r,
                             FadeObject.Materials[i].color.g,
                             FadeObject.Materials[i].color.b,
-                            Mathf.Lerp(FadeObject.InitialAlpha, FadedAlpha, waitTime * ticks * FadeSpeed)
+                            Mathf.Lerp(FadeObject.InitialAlpha, _fadedAlpha, waitTime * ticks * _fadeSpeed)
                         );
                     }
                 }
@@ -141,10 +146,10 @@ public class FadeObjectEndSeason : MonoBehaviour
             */
         }
 
-        if (RunningCoroutines.ContainsKey(season))
+        if (_runningCoroutines.ContainsKey(season))
         {
-            StopCoroutine(RunningCoroutines[season]);
-            RunningCoroutines.Remove(season);
+            StopCoroutine(_runningCoroutines[season]);
+            _runningCoroutines.Remove(season);
             season.gameObject.SetActive(false);
             season.isActive = false;
             season.isFading = false;
@@ -154,7 +159,7 @@ public class FadeObjectEndSeason : MonoBehaviour
     private IEnumerator FadeObjectIn(SeasonObject season)
     {
         FadeObject FadeObject = season.gameObject.GetComponent<FadeObject>();
-        float waitTime = 1f / FadeFPS;
+        float waitTime = 1f / _fadeFPS;
         WaitForSeconds Wait = new WaitForSeconds(waitTime);
         int ticks = 1;
 
@@ -188,7 +193,7 @@ public class FadeObjectEndSeason : MonoBehaviour
                             FadeObject.Materials[i].color.r,
                             FadeObject.Materials[i].color.g,
                             FadeObject.Materials[i].color.b,
-                            Mathf.Lerp(FadedAlpha, 1, waitTime * ticks * FadeSpeed)
+                            Mathf.Lerp(_fadedAlpha, 1, waitTime * ticks * _fadeSpeed)
                         );
                     }
                 }
@@ -200,10 +205,10 @@ public class FadeObjectEndSeason : MonoBehaviour
             }
         }
 
-        if (RunningCoroutines.ContainsKey(season))
+        if (_runningCoroutines.ContainsKey(season))
         {
-            StopCoroutine(RunningCoroutines[season]);
-            RunningCoroutines.Remove(season);
+            StopCoroutine(_runningCoroutines[season]);
+            _runningCoroutines.Remove(season);
             season.isFading = false;
         }
     }
