@@ -14,7 +14,6 @@ public class FadeObject : MonoBehaviour
         foreach (Renderer render in GetComponentsInChildren<Renderer>())
             Renderers.Add(render);
         Position = transform.position;
-        print(Renderers.Count);
         if (Renderers.Count == 0)
         {
             Renderers.AddRange(GetComponentsInChildren<Renderer>());
