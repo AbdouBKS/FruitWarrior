@@ -10,11 +10,11 @@ public class FadeObject : MonoBehaviour
     [HideInInspector]
     public float InitialAlpha;
 
-    private void Awake()
-    {
+    private void Awake() {
         foreach (Renderer render in GetComponentsInChildren<Renderer>())
             Renderers.Add(render);
         Position = transform.position;
+        print(Renderers.Count);
         if (Renderers.Count == 0)
         {
             Renderers.AddRange(GetComponentsInChildren<Renderer>());

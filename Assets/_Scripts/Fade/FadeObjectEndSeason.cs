@@ -32,7 +32,7 @@ public class FadeObjectEndSeason : MonoBehaviour
 
     private Dictionary<SeasonObject, Coroutine> _runningCoroutines = new Dictionary<SeasonObject, Coroutine>();
 
-    private void Awake() {
+    private void Start() {
         for (int i = 0; i < _seasonObjectList.Count; ++i) {
             _seasonObjectList[i].gameObject.SetActive(_seasonObjectList[i].isActive);
             if (!_seasonObjectList[i].isActive)
